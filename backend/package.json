@@ -1,0 +1,17 @@
+{
+  "name": "campus-pocket-backend",
+  "version": "1.0.0",
+  "description": "Supabase backend for the Campus Pocket school app",
+  "type": "module",
+  "scripts": {
+    "seed-auth": "node scripts/createAuthUsers.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.104.1",
+    "dotenv": "^16.4.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

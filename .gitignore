@@ -1,0 +1,8 @@
+# ignore markdown
+*.md
+
+# ignore node modules
+node_modules/
+
+# env files
+.env
