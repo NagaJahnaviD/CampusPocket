@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Campus Pocket - Bus GPS</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 { font-size: 22px; margin-bottom: 4px; }
+    .subtitle { color: #94a3b8; font-size: 13px; margin-bottom: 24px; }
+    .card {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 16px;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #f59e0b;
+    }
+    .dot.live {
+      background: #10b981;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .status-text { font-weight: 700; font-size: 16px; }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #334155;
+      font-size: 14px;
+    }
+    .info-label { color: #94a3b8; }
+    .info-value { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .btn {
+      width: 100%;
+      max-width: 400px;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+    .btn-start { background: linear-gradient(135deg, #10b981, #059669); }
+    .btn-stop { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .btn:active { transform: scale(0.98); }
+    .error { color: #ef4444; font-size: 13px; text-align: center; margin-bottom: 12px; }
+    .hint { color: #64748b; font-size: 12px; text-align: center; line-height: 1.6; }
+    .counter { color: #6366f1; font-size: 28px; font-weight: 800; text-align: center; margin: 8px 0; }
+  </style>
+</head>
+<body>
+  <h1>🚌 Bus GPS Broadcaster</h1>
+  <p class="subtitle">Campus Pocket — Open this on your phone</p>
+
+  <div class="card">
+    <div class="status">
+      <div class="dot" id="statusDot"></div>
+      <span class="status-text" id="statusText">Ready</span>
+    </div>
+    <div id="info" style="display:none">
+      <div class="info-row">
+        <span class="info-label">Latitude</span>
+        <span class="info-value" id="lat">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Longitude</span>
+        <span class="info-value" id="lng">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Speed</span>
+        <span class="info-value" id="speed">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Updates Sent</span>
+        <span class="info-value" id="count" style="color:#6366f1">0</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="error" id="error" style="display:none"></p>
+
+  <button class="btn btn-start" id="startBtn" onclick="startBroadcast()">
+    Start Broadcasting
+  </button>
+  <button class="btn btn-stop" id="stopBtn" onclick="stopBroadcast()" style="display:none">
+    Stop Broadcasting
+  </button>
+
+  <p class="hint">
+    Students and parents will see your live location<br>
+    on the "Track Bus" screen in the app.
+  </p>
+
+  <script>
+    // ── Supabase Config ────────────────────────────
+    // Uses the same project as the app
+    const SUPABASE_URL = 'https://sapgjvmnzejtjqxpihxc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhcGdqdm1uemVqdGpxeHBpaHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNDYyNTYsImV4cCI6MjA5MjYyMjI1Nn0.Cp_am0RNQXqXaM6WXzBjTK646kldU5fiqq9pUEO56po';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let channel = null;
+    let watchId = null;
+    let updateCount = 0;
+
+    function showError(msg) {
+      const el = document.getElementById('error');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function startBroadcast() {
+      document.getElementById('error').style.display = 'none';
+
+      if (!navigator.geolocation) {
+        showError('Geolocation not supported in this browser.');
+        return;
+      }
+
+      // Create Supabase Realtime channel
+      channel = supabase.channel('bus-location', {
+        config: { broadcast: { self: true } },
+      });
+      channel.subscribe();
+
+      // Watch GPS
+      watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          const speed = pos.coords.speed || 0;
+
+          // Broadcast to all subscribers
+          channel.send({
+            type: 'broadcast',
+            event: 'location',
+            payload: { lat, lng, speed, timestamp: Date.now() },
+          });
+
+          // Update UI
+          updateCount++;
+          document.getElementById('lat').textContent = lat.toFixed(6);
+          document.getElementById('lng').textContent = lng.toFixed(6);
+          document.getElementById('speed').textContent = (speed * 3.6).toFixed(1) + ' km/h';
+          document.getElementById('count').textContent = updateCount;
+          document.getElementById('info').style.display = 'block';
+          document.getElementById('statusDot').className = 'dot live';
+          document.getElementById('statusText').textContent = 'Broadcasting Live';
+        },
+        (err) => {
+          showError('GPS Error: ' + err.message);
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 2000,
+          timeout: 10000,
+        }
+      );
+
+      // Toggle buttons
+      document.getElementById('startBtn').style.display = 'none';
+      document.getElementById('stopBtn').style.display = 'block';
+    }
+
+    function stopBroadcast() {
+      if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+      }
+      if (channel) {
+        supabase.removeChannel(channel);
+        channel = null;
+      }
+      updateCount = 0;
+
+      // Reset UI
+      document.getElementById('statusDot').className = 'dot';
+      document.getElementById('statusText').textContent = 'Stopped';
+      document.getElementById('startBtn').style.display = 'block';
+      document.getElementById('stopBtn').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

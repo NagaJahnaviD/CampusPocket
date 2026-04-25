@@ -34,7 +34,7 @@ export default function CircularsScreen() {
 
   return (
     <ScreenContainer>
-      <Text style={[styles.title, { color: c.text }]}>📢 Circulars</Text>
+      <Text style={[styles.title, { color: c.text }]}>Circulars</Text>
       {circulars.map((ci) => (
         <AppCard key={ci.id}>
           <Text style={[styles.circularTitle, { color: c.text }]}>{ci.title}</Text>

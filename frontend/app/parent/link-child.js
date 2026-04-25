@@ -75,7 +75,7 @@ export default function LinkChild() {
         {success && (
           <View style={[styles.successBanner, { backgroundColor: c.successSoft }]}>
             <Text style={[styles.successText, { color: c.success }]}>
-              ✅ Child linked successfully!
+              Child linked successfully!
             </Text>
           </View>
         )}

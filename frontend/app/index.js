@@ -6,6 +6,7 @@ import {
   View, Text, TextInput, TouchableOpacity, ActivityIndicator,
   StyleSheet, KeyboardAvoidingView, Platform
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useAuth } from "../src/context/AuthContext";
@@ -49,7 +50,7 @@ export default function IndexScreen() {
       <View style={styles.inner}>
         {/* Header with gradient text effect */}
         <View style={styles.logoArea}>
-          <Text style={[styles.logoEmoji]}>🎓</Text>
+          <Ionicons name="school-outline" size={48} color={c.primary} />
           <Text style={[styles.title, { color: c.primary }]}>Campus Pocket</Text>
           <Text style={[styles.subtitle, { color: c.textSecondary }]}>
             Your school, in your pocket

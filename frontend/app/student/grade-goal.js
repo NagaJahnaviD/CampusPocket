@@ -3,6 +3,7 @@
 // ============================================================
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../../src/context/AuthContext";
 import { useTheme } from "../../src/context/ThemeContext";
@@ -55,7 +56,7 @@ export default function GradeGoal() {
 
   return (
     <ScreenContainer>
-      <Text style={[styles.title, { color: c.text }]}>🎯 Grade Goal Setter</Text>
+      <Text style={[styles.title, { color: c.text }]}>Grade Goal Setter</Text>
       <Text style={[styles.subtitle, { color: c.textSecondary }]}>
         Select a class and set your target grade.
       </Text>
@@ -110,11 +111,11 @@ export default function GradeGoal() {
       {error && <ErrorMessage message={error} />}
 
       {result && (
-        <AppCard title="📊 Result">
+        <AppCard title="Result">
           {result.possible === false && result.message ? (
             /* All assignments completed — show message */
             <View style={styles.doneBox}>
-              <Text style={[styles.doneEmoji]}>✅</Text>
+              <Ionicons name="checkmark-circle" size={28} color="#10b981" />
               <Text style={[styles.doneText, { color: c.text }]}>
                 {result.message}
               </Text>

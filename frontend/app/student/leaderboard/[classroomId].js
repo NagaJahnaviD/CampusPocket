@@ -43,14 +43,14 @@ export default function Leaderboard() {
 
   return (
     <ScreenContainer>
-      <Text style={[styles.title, { color: c.text }]}>🏆 Leaderboard</Text>
+      <Text style={[styles.title, { color: c.text }]}>Leaderboard</Text>
       <Text style={[styles.subtitle, { color: c.textSecondary }]}>
         Rankings are anonymized for privacy
       </Text>
 
-      {entries.map((entry) => (
+      {entries.map((entry, i) => (
         <View
-          key={entry.rank}
+          key={`rank-${i}`}
           style={[
             styles.row,
             { backgroundColor: c.surface, borderColor: c.border },

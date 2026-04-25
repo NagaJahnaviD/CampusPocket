@@ -3,6 +3,7 @@
 // ============================================================
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../src/context/ThemeContext";
 import { useAuth } from "../src/context/AuthContext";
 import { fetchStudentActivities } from "../src/services/api";
@@ -41,16 +42,16 @@ export default function ActivitiesScreen() {
 
   return (
     <ScreenContainer>
-      <Text style={[styles.title, { color: c.text }]}>⚽ Activities</Text>
-      {activities.map((act) => (
-        <AppCard key={act.id}>
+      <Text style={[styles.title, { color: c.text }]}>Activities</Text>
+      {activities.map((act, i) => (
+        <AppCard key={act.id || `act-${i}`}>
           <View style={styles.row}>
-            <Text style={styles.emoji}>🎯</Text>
+            <Ionicons name="fitness-outline" size={24} color={c.primary} />
             <View style={styles.info}>
               <Text style={[styles.name, { color: c.text }]}>{act.name}</Text>
               {act.day_of_week && (
                 <Text style={[styles.schedule, { color: c.textSecondary }]}>
-                  📅 {act.day_of_week}{act.time_slot ? ` • ${act.time_slot}` : ""}
+                  {act.day_of_week}{act.time_slot ? ` • ${act.time_slot}` : ""}
                 </Text>
               )}
               {act.description && (

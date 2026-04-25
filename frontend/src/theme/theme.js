@@ -1,94 +1,115 @@
 // ============================================================
-// theme.js – Premium design system with dark/light modes
+// theme.js – Modern Peach & Nothing OS design system
+// ============================================================
+// Light: Peach / coral warmth
+// Dark:  Blue-green depth (Nothing OS inspired)
 // ============================================================
 
 const palette = {
-  // Primary brand colors
-  indigo: "#6366f1",
-  indigoLight: "#818cf8",
-  indigoDark: "#4f46e5",
-  indigoSoft: "rgba(99, 102, 241, 0.12)",
+  // ── Peach primary (light mode) ──
+  peach:        "#FF9B71",      // Vibrant peach (accent / buttons)
+  peachLight:   "#FFD7BA",      // Soft peach
+  peachSoft:    "rgba(255, 155, 113, 0.12)",
+  peachBg:      "#FFF8F5",      // Off-white peach shell
 
-  // Accent
-  emerald: "#10b981",
-  emeraldSoft: "rgba(16, 185, 129, 0.12)",
+  // ── Blue-green primary (dark mode) ──
+  teal:         "#00E676",      // Nothing green
+  tealLight:    "#69F0AE",      // Lighter green
+  tealSoft:     "rgba(0, 230, 118, 0.15)",
+  tealDark:     "#00C853",
 
-  // Status
-  rose: "#f43f5e",
-  roseSoft: "rgba(244, 63, 94, 0.12)",
-  amber: "#f59e0b",
-  amberSoft: "rgba(245, 158, 11, 0.12)",
-  sky: "#0ea5e9",
+  // ── Accent ──
+  coral:        "#FF6B6B",      // Warm coral
+  blue:         "#007AFF",      // Action blue
 
-  // Neutrals
-  white: "#ffffff",
-  gray50: "#f8fafc",
-  gray100: "#f1f5f9",
-  gray200: "#e2e8f0",
-  gray300: "#cbd5e1",
-  gray400: "#94a3b8",
-  gray500: "#64748b",
-  gray600: "#475569",
-  gray700: "#334155",
-  gray800: "#1e293b",
-  gray900: "#0f172a",
-  gray950: "#020617",
+  // ── Status ──
+  success:      "#00E676",
+  successSoft:  "rgba(0, 230, 118, 0.12)",
+  rose:         "#f43f5e",
+  roseSoft:     "rgba(244, 63, 94, 0.12)",
+  amber:        "#FFBF00",      // Amber alert
+  amberSoft:    "rgba(255, 191, 0, 0.12)",
+
+  // ── Neutrals (Nothing OS) ──
+  white:        "#FFFFFF",
+  shell:        "#FFF8F5",      // Peach off-white
+  gray50:       "#F9F9F9",      // Soft gray surface
+  gray100:      "#f1f5f9",
+  gray200:      "#EDEDED",      // Subtle border
+  gray300:      "#cbd5e1",
+  gray400:      "#94a3b8",
+  gray500:      "#64748B",      // Slate gray body text
+  gray600:      "#475569",
+  gray700:      "#334155",
+  gray800:      "#1e293b",
+  gray900:      "#121212",      // Deep obsidian
+  gray950:      "#0a0a0a",
 };
 
+// ── Light Mode: Peach warmth ──
 const lightColors = {
-  primary: palette.indigo,
-  primaryLight: palette.indigoSoft,
-  primaryGradientStart: "#6366f1",
-  primaryGradientEnd: "#8b5cf6",
-  accent: palette.emerald,
-  accentSoft: palette.emeraldSoft,
-  background: palette.gray50,
-  surface: palette.white,
-  surfaceElevated: palette.white,
-  text: palette.gray900,
-  textSecondary: palette.gray500,
-  textMuted: palette.gray400,
-  error: palette.rose,
-  errorSoft: palette.roseSoft,
-  success: palette.emerald,
-  successSoft: palette.emeraldSoft,
-  warning: palette.amber,
-  warningSoft: palette.amberSoft,
-  danger: palette.rose,
-  border: palette.gray200,
-  divider: palette.gray100,
-  shadow: "rgba(0, 0, 0, 0.08)",
-  overlay: "rgba(0, 0, 0, 0.4)",
-  cardGlow: "rgba(99, 102, 241, 0.06)",
-  statusBarStyle: "dark",
+  primary:              palette.peach,
+  primaryLight:         palette.peachSoft,
+  primaryGradientStart: "#FF9B71",
+  primaryGradientEnd:   "#FFD7BA",
+  accent:               palette.blue,
+  accentSoft:           "rgba(0, 122, 255, 0.10)",
+
+  background:           palette.shell,
+  surface:              palette.white,
+  surfaceElevated:      palette.white,
+
+  text:                 palette.gray900,       // Deep obsidian
+  textSecondary:        palette.gray500,       // Slate gray
+  textMuted:            palette.gray400,
+
+  error:                palette.rose,
+  errorSoft:            palette.roseSoft,
+  success:              palette.success,
+  successSoft:          palette.successSoft,
+  warning:              palette.amber,
+  warningSoft:          palette.amberSoft,
+  danger:               palette.rose,
+
+  border:               palette.gray200,
+  divider:              palette.gray200,
+  shadow:               "rgba(255, 155, 113, 0.10)",
+  overlay:              "rgba(0, 0, 0, 0.4)",
+  cardGlow:             "rgba(255, 155, 113, 0.06)",
+  statusBarStyle:       "dark",
 };
 
+// ── Dark Mode: True Dark (Nothing OS inspired with Peach Accents) ──
 const darkColors = {
-  primary: palette.indigoLight,
-  primaryLight: "rgba(129, 140, 248, 0.15)",
-  primaryGradientStart: "#4f46e5",
-  primaryGradientEnd: "#7c3aed",
-  accent: palette.emerald,
-  accentSoft: "rgba(16, 185, 129, 0.15)",
-  background: palette.gray950,
-  surface: palette.gray900,
-  surfaceElevated: palette.gray800,
-  text: palette.gray50,
-  textSecondary: palette.gray400,
-  textMuted: palette.gray600,
-  error: "#fb7185",
-  errorSoft: "rgba(251, 113, 133, 0.15)",
-  success: "#34d399",
-  successSoft: "rgba(52, 211, 153, 0.15)",
-  warning: "#fbbf24",
-  warningSoft: "rgba(251, 191, 36, 0.15)",
-  danger: "#fb7185",
-  border: palette.gray800,
-  divider: palette.gray800,
-  shadow: "rgba(0, 0, 0, 0.3)",
-  overlay: "rgba(0, 0, 0, 0.6)",
-  cardGlow: "rgba(129, 140, 248, 0.08)",
-  statusBarStyle: "light",
+  primary:              palette.peach,
+  primaryLight:         palette.peachSoft,
+  primaryGradientStart: "#FF9B71",
+  primaryGradientEnd:   "#FFD7BA",
+  accent:               palette.peachLight,
+  accentSoft:           "rgba(255, 155, 113, 0.15)",
+
+  background:           "#000000",
+  surface:              "#121212",
+  surfaceElevated:      "#1e1e1e",
+
+  text:                 palette.gray50,
+  textSecondary:        "rgba(255, 255, 255, 0.8)",
+  textMuted:            palette.gray500,
+
+  error:                "#fb7185",
+  errorSoft:            "rgba(251, 113, 133, 0.15)",
+  success:              "#69F0AE",
+  successSoft:          "rgba(105, 240, 174, 0.15)",
+  warning:              "#FFBF00",
+  warningSoft:          "rgba(255, 191, 0, 0.15)",
+  danger:               "#fb7185",
+
+  border:               "#262626",
+  divider:              "#262626",
+  shadow:               "rgba(0, 0, 0, 0.3)",
+  overlay:              "rgba(0, 0, 0, 0.6)",
+  cardGlow:             "rgba(255, 155, 113, 0.08)",
+  statusBarStyle:       "light",
 };
 
 const shared = {
@@ -110,10 +131,10 @@ const shared = {
     xxl: 48,
   },
   borderRadius: {
-    sm: 6,
-    md: 12,
-    lg: 16,
-    xl: 24,
+    sm: 8,
+    md: 16,
+    lg: 20,       // Card radius (Nothing OS rounded)
+    xl: 32,       // Extra rounded
     full: 999,
   },
 };

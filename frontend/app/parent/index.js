@@ -14,6 +14,7 @@ import AppCard from "../../src/components/AppCard";
 import LoadingScreen from "../../src/components/LoadingScreen";
 import ErrorMessage from "../../src/components/ErrorMessage";
 import EmptyState from "../../src/components/EmptyState";
+import BottomNav from "../../src/components/BottomNav";
 
 export default function ParentHome() {
   const { profile, signOut } = useAuth();
@@ -46,13 +47,14 @@ export default function ParentHome() {
   const children = dashboard.children || [];
 
   return (
+    <>
     <ScreenContainer>
       {/* Header */}
       <View style={styles.header}>
         <View>
           <Text style={[styles.greeting, { color: c.textSecondary }]}>Parent Portal</Text>
           <Text style={[styles.name, { color: c.text }]}>
-            {profile?.full_name || "Parent"} 👋
+            {profile?.full_name || "Parent"}
           </Text>
         </View>
         <View style={styles.headerActions}>
@@ -80,13 +82,19 @@ export default function ParentHome() {
           style={[styles.chip, { backgroundColor: c.surface, borderColor: c.border }]}
           onPress={() => router.push("/calendar")}
         >
-          <Text style={[styles.chipText, { color: c.primary }]}>📅 Calendar</Text>
+          <Text style={[styles.chipText, { color: c.primary }]}>Calendar</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.chip, { backgroundColor: c.surface, borderColor: c.border }]}
           onPress={() => router.push("/circulars")}
         >
-          <Text style={[styles.chipText, { color: c.primary }]}>📢 Notices</Text>
+          <Text style={[styles.chipText, { color: c.primary }]}>Notices</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.chip, { backgroundColor: c.surface, borderColor: c.border }]}
+          onPress={() => router.push("/bus-tracker")}
+        >
+          <Text style={[styles.chipText, { color: c.primary }]}>Track Bus</Text>
         </TouchableOpacity>
       </View>
 
@@ -132,7 +140,7 @@ export default function ParentHome() {
                 {unpaidCount > 0 && (
                   <View style={[styles.alertBar, { backgroundColor: c.warningSoft }]}>
                     <Text style={[styles.alertText, { color: c.warning }]}>
-                      ⚠️ {unpaidCount} unpaid fee{unpaidCount > 1 ? "s" : ""} — please pay soon
+                      ⚠️ {unpaidCount} unpaid fee{unpaidCount > 1 ? "s" : ""} — tap to pay
                     </Text>
                   </View>
                 )}
@@ -146,6 +154,8 @@ export default function ParentHome() {
         })
       )}
     </ScreenContainer>
+    <BottomNav />
+    </>
   );
 }
 
